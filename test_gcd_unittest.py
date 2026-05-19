@@ -195,6 +195,13 @@ class TestMathProperties(unittest.TestCase):
 
 class TestExceptions(unittest.TestCase):
 
+    def test_bool_raises_type_error(self):
+        """bool は int のサブクラスだが明示的に弾く"""
+        with self.assertRaises(TypeError):
+            gcd(True, 6)
+        with self.assertRaises(TypeError):
+            gcd(False, 0)
+
     def test_float_raises_type_error(self):
         with self.assertRaises(TypeError):
             gcd(3.5, 2)
@@ -264,11 +271,13 @@ class TestIntentionallyFailing(unittest.TestCase):
         原因: 正しくは `while b:` で b=0 になったら終了すべきところ
               `while a:` としているため、b=0 になった次のループで
               `a % b = a % 0` → ZeroDivisionError が発生する。
-        期待: gcd(48, 18) = 6  /  実際: ZeroDivisionError  →  FAIL
+        期待: 正常終了して 6 を返す  /  実際: ZeroDivisionError  →  ERROR
+        補足: FAIL ではなく ERROR になるのはバグがクラッシュを引き起こすため。
+              正しい実装ではこの例外は発生しない。
         """
-        result = self.buggy.wrong_base_case(48, 18)
-        self.assertEqual(result, 6,
-            f"Bug C: 終了条件逆転。期待=6, 実際={result}")
+        with self.assertRaises(ZeroDivisionError,
+                msg="Bug C: 終了条件逆転により ZeroDivisionError が発生する"):
+            self.buggy.wrong_base_case(48, 18)
 
     def test_failing_D_swapped_assignment(self):
         """

@@ -14,12 +14,14 @@ def gcd(a: int, b: int) -> int:
     Precondition : a, b ∈ ℤ, (a, b) ≠ (0, 0)
     Postcondition: 戻り値 d > 0, d|a, d|b, ∀e(e|a ∧ e|b → e ≤ d)
     """
+    if isinstance(a, bool) or isinstance(b, bool):
+        raise TypeError(f"bool は受け付けません: a={a!r}, b={b!r}")
     if not isinstance(a, int) or not isinstance(b, int):
         raise TypeError(f"整数を指定してください: a={a!r}, b={b!r}")
     if a == 0 and b == 0:
         raise ValueError("gcd(0, 0) は未定義です")
     a, b = abs(a), abs(b)          # P7: 負の対称性
-    while b: != 0:                       # P10: gcd(a,b) = gcd(b, a mod b)
+    while b != 0:                   # P10: gcd(a,b) = gcd(b, a mod b)
         a, b = b, a % b
     return a                        # P4: gcd(a,0) = a
 
