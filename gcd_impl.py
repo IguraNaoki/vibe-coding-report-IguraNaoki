@@ -19,7 +19,7 @@ def gcd(a: int, b: int) -> int:
     if a == 0 and b == 0:
         raise ValueError("gcd(0, 0) は未定義です")
     a, b = abs(a), abs(b)          # P7: 負の対称性
-    while b:                        # P10: gcd(a,b) = gcd(b, a mod b)
+    while b: != 0:                       # P10: gcd(a,b) = gcd(b, a mod b)
         a, b = b, a % b
     return a                        # P4: gcd(a,0) = a
 
